@@ -9,7 +9,7 @@ import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import persistance.workwithbase.ICRUD;
 
-import java.sql.Timestamp;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
@@ -32,10 +32,10 @@ public class WorkerHibernate implements ICRUD<Task>, AutoCloseable {
     public Task add(Task task) {
         Session session = sf.openSession();
         session.beginTransaction();
-        session.save(task);
+        Serializable id = session.save(task);
         session.getTransaction().commit();
+        Task it = session.get(Task.class, id);
         session.close();
-        Task it = task;
         return it;
     }
 
@@ -49,9 +49,8 @@ public class WorkerHibernate implements ICRUD<Task>, AutoCloseable {
         System.out.println(" FindAllWorkerHibernate  + 49");
         Task emptyTask = new Task();
         emptyTask.setId(0);
-        //       emptyTask.setCreated(new Timestamp(System.currentTimeMillis()));
+
         emptyTask.setDescription("EMPTY TASK");
-        //       emptyTask.setDone(false);
         List<Task> empty = new ArrayList<>();
         empty.add(emptyTask);
         List<Task> result = this.makeTransaction(session -> session.createQuery("from Task ").list());
@@ -90,4 +89,9 @@ public class WorkerHibernate implements ICRUD<Task>, AutoCloseable {
         session.close();
         return result;
     }
+
+    public void deleteAll() {
+        makeTransaction(session -> session.createQuery("delete from  Task ").executeUpdate());
+    }
+
 }
