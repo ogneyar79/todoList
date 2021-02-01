@@ -52,4 +52,13 @@ public class Task {
         this.done = done;
     }
 
+    @Override
+    public String toString() {
+        return "Task{" +
+                "id=" + id +
+                ", description='" + description + '\'' +
+                ", created=" + created +
+                ", done=" + done +
+                '}';
+    }
 }
