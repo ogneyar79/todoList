@@ -1,5 +1,6 @@
 package persistance;
 
+
 import model.Task;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -7,12 +8,14 @@ import org.hibernate.Transaction;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.jboss.logging.Logger;
 import persistance.workwithbase.ICRUD;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
+
 
 public class WorkerHibernate implements ICRUD<Task>, AutoCloseable {
     private final StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
@@ -27,6 +30,8 @@ public class WorkerHibernate implements ICRUD<Task>, AutoCloseable {
     public static WorkerHibernate instOf() {
         return Lazy.INST;
     }
+
+    private static Logger LOG = Logger.getLogger(WorkerHibernate.class.getName());
 
     @Override
     public Task add(Task task) {
@@ -55,7 +60,12 @@ public class WorkerHibernate implements ICRUD<Task>, AutoCloseable {
         empty.add(emptyTask);
         List<Task> result = this.makeTransaction(session -> session.createQuery("from Task ").list());
         System.out.println(result.size() + ": Size of result");
+        LOG.info(result.size()+"INFO LOG");
         result.stream().forEach(System.out::println);
+        result.stream().map(task -> {
+            LOG.info(task.toString()+"INFO LOG");
+            return task;
+        });
         return result.size() == 0 ? empty : result;
     }
 
