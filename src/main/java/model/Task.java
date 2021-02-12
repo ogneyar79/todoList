@@ -1,11 +1,22 @@
 package model;
 
+import lombok.*;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
 @Entity
 @Table(name = "tasks")
+@AllArgsConstructor
+@DynamicInsert
+@DynamicUpdate
+@Getter
+@Setter
+@EqualsAndHashCode(of = "id")
+@ToString
 public class Task implements Serializable {
 
     @Id
@@ -16,50 +27,15 @@ public class Task implements Serializable {
     private Timestamp created;
     private boolean done;
 
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private Users user;
+
+
     public Task() {
         this.created = new Timestamp(System.currentTimeMillis());
         this.done = false;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public void setCreated(Timestamp created) {
-        this.created = created;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public Timestamp getCreated() {
-        return created;
-    }
-
-    public boolean isDone() {
-        return done;
-    }
-
-    public void setDone(boolean done) {
-        this.done = done;
-    }
-
-    @Override
-    public String toString() {
-        return "Task{" +
-                "id=" + id +
-                ", description='" + description + '\'' +
-                ", created=" + created +
-                ", done=" + done +
-                '}';
-    }
 }

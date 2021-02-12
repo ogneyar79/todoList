@@ -2,6 +2,7 @@ package persistance;
 
 
 import model.Task;
+import model.Users;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -24,6 +25,7 @@ public class WorkerHibernate implements ICRUD<Task>, AutoCloseable {
             .buildMetadata().buildSessionFactory();
 
     private static final class Lazy {
+
         private static final WorkerHibernate INST = new WorkerHibernate();
     }
 
@@ -49,6 +51,10 @@ public class WorkerHibernate implements ICRUD<Task>, AutoCloseable {
         return makeTransaction(session -> session.get(Task.class, id));
     }
 
+    public List<Task> getByUser(Users user) {
+        return this.makeTransaction(session -> session.createQuery("from Task where user.id=" + user.getId()).list());
+    }
+
     @Override
     public List<Task> findAll() {
         System.out.println(" FindAllWorkerHibernate  + 49");
@@ -60,10 +66,10 @@ public class WorkerHibernate implements ICRUD<Task>, AutoCloseable {
         empty.add(emptyTask);
         List<Task> result = this.makeTransaction(session -> session.createQuery("from Task ").list());
         System.out.println(result.size() + ": Size of result");
-        LOG.info(result.size()+"INFO LOG");
+        LOG.info(result.size() + "INFO LOG");
         result.stream().forEach(System.out::println);
         result.stream().map(task -> {
-            LOG.info(task.toString()+"INFO LOG");
+            LOG.info(task.toString() + "INFO LOG");
             return task;
         });
         return result.size() == 0 ? empty : result;
@@ -91,7 +97,7 @@ public class WorkerHibernate implements ICRUD<Task>, AutoCloseable {
         StandardServiceRegistryBuilder.destroy(registry);
     }
 
-    public <T> T makeTransaction(final Function<Session, T> operationCRUID) {
+    public  <T> T makeTransaction(final Function<Session, T> operationCRUID) {
         Session session = sf.openSession();
         Transaction transaction = session.beginTransaction();
         T result = operationCRUID.apply(session);

@@ -1,10 +1,10 @@
 package persistance.workwithbase;
 
-import model.Task;
+import org.hibernate.Session;
 
 import java.sql.SQLException;
-import java.util.Collections;
 import java.util.List;
+import java.util.function.Function;
 
 
 public interface ICRUD<T> {
@@ -18,4 +18,6 @@ public interface ICRUD<T> {
     T delete(int id);
 
     T update(int id, T task) throws SQLException;
+    <T> T makeTransaction(final Function<Session, T> operationCRUID);
+
 }
