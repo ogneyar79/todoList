@@ -16,16 +16,22 @@ import java.io.Serializable;
 @Setter
 @EqualsAndHashCode(of = "id")
 @ToString(of = "name", includeFieldNames = false)
+@Table(name = "users")
 public class Users implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @Column(name = "id")
     private Long id;
     private String name;
     private String email;
     private String password;
 
-    public Users(String maksimus, String s, String ma2444) {
+    public Users(String name, String email, String password) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
     }
+
+
 }

@@ -97,7 +97,7 @@ public class WorkerHibernate implements ICRUD<Task>, AutoCloseable {
         StandardServiceRegistryBuilder.destroy(registry);
     }
 
-    public  <T> T makeTransaction(final Function<Session, T> operationCRUID) {
+    public <T> T makeTransaction(final Function<Session, T> operationCRUID) {
         Session session = sf.openSession();
         Transaction transaction = session.beginTransaction();
         T result = operationCRUID.apply(session);

@@ -38,8 +38,10 @@
             console.log(data + ": 38 ready Function")
             let table = $('#table')
             data.forEach(function (item, i) {
+                console.log(item.user.name + ": item.user.name")
                 table = $('#table')
                 table.append('<tr>')
+                table.append('<td>' + item.user.name + '</td>')
                 table.append('<td>' + item.id + '</td>')
                 table.append('<td>' + item.description + '</td>')
                 table.append('<td>' + item.created + '</td>')
@@ -104,7 +106,6 @@
             </tr>
             </tbody>
         </table>
-
     </div>
 </div>
 
@@ -117,10 +118,11 @@
         <table class="table table-bordered" style="background-color: azure">
             <thead>
             <tr>
-                <th>ID</th>
-                <th style="width: 400px">Task</th>
+                <th>AUTHOR OF TASK</th>
+                <th style="width: 400px">ID</th>
+                <th style="width: 400px">DESCRIPTION</th>
                 <th>Date of Creation</th>
-                <th>Result</th>
+                <th>Result of task</th>
             </tr>
             </thead>
             <tbody id="table"></tbody>
